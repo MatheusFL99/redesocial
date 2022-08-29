@@ -1,26 +1,26 @@
 const mongoose = require('mongoose')
 
-// modelo do usuario no banco de dados
 const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: 'Nome é obrigatório!'
+      required: true
     },
     email: {
       type: String,
-      unique: true,
-      required: 'Email é obrigatório!'
+      required: true
     },
     password: {
       type: String,
-      required: 'Senha é obrigatória!'
+      required: true
+    },
+    image: {
+      type: String
     }
   },
   {
     timestamps: true
   }
 )
-
 const User = mongoose.model('User', userSchema)
 module.exports = User

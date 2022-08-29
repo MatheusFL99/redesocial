@@ -1,21 +1,28 @@
-const express = require('express')
-const userController = require('../controllers/User')
-const postController = require('../controllers/Post')
-const checkToken = require('../middleware/auth')
+const router = require('express').Router()
+const UserController = require('../controllers/UserController')
+const PostController = require('../controllers/PostController')
+const { imageUpload } = require('../helpers/image-upload')
 
-const router = express.Router()
+const verifyToken = require('../helpers/verify-token')
+
+
 
 // rotas definidas pra api usuários
-router.route('/users').get(userController.test)
-router.route('/users/register').post(userController.register)
-router.route('/users/login').post(userController.login)
-router.route('/users/:id/update').put(checkToken, userController.update)
-router.route('/users/:id').get(checkToken, userController.checkuser)
+router.post('/users/register', UserController.register)
+router.post('/users/login', UserController.login)
+router.get('/users/checkuser', UserController.checkUser)
+router.get('/users/:id', UserController.getUserById)
+router.patch(
+  '/users/edit/:id',
+  verifyToken,
+  imageUpload.single('image'),
+  UserController.editUser
+)
 
 // rotas definidas para api posts
-router.route('/posts/newpost').post(postController.newPost)
-router.route('/posts/:id').put(postController.updatePost)
-router.route('/posts/:id').get(postController.getPost)
-router.route('/posts/:id/like').put(postController.likePost)
+router.post('/posts/newpost', verifyToken, PostController.createPost)
+router.get('/posts/posts', PostController.getAllPosts)
+router.delete('/posts/:id', verifyToken, PostController.removePost)
+router.patch('/posts/:id/like', verifyToken, PostController.likePost)
 
 module.exports = router

@@ -3,10 +3,6 @@ const mongoose = require('mongoose')
 // modelo das postagens no banco de dados
 const postSchema = new mongoose.Schema(
   {
-    userId: {
-      type: String,
-      required: true
-    },
     desc: {
       type: String,
       max: 500
@@ -17,7 +13,8 @@ const postSchema = new mongoose.Schema(
     likes: {
       type: Array,
       default: []
-    }
+    },
+    user: Object
   },
   { timestamps: true }
 )

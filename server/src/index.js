@@ -2,7 +2,13 @@ const express = require('express')
 const dotenv = require('dotenv')
 const database = require('./config/database')
 const routes = require('./routes/index.routes')
+const cors = require('cors')
+
 const app = express()
+
+dotenv.config()
+database()
+app.use(express.json())
 
 app.use(function (req, res, next) {
   //CORS
@@ -14,12 +20,10 @@ app.use(function (req, res, next) {
   )
   next()
 })
+app.unsubscribe(cors({ credentials: true, origin: 'http://localhost:3000' }))
 
-app.use(express.json())
 
-dotenv.config()
-database()
-
+// routes
 app.use('/api', routes)
 
 app.listen(3001, () => {
