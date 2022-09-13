@@ -1,43 +1,21 @@
-import React, { useRef } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import Input from '../../form/Input'
+import { useState, useContext } from 'react'
+import { Context } from '../../../context/UserContext'
 import './register.css'
 
 export default function Register() {
-  const name = useRef()
-  const email = useRef()
-  const password = useRef()
-  const confirmPassword = useRef()
-
-  let navigate = useNavigate()
-  const routeChange = () => {
-    let path = `/login`
-    navigate(path)
+  const [user, setUser] = useState({})
+  const { register } = useContext(Context)
+  const handleChange = e => {
+    setUser({ ...user, [e.target.name]: e.target.value })
   }
 
-  const handleClick = async e => {
+  const handleSubmit = e => {
     e.preventDefault()
-    if (confirmPassword.current.value !== password.current.value) {
-      confirmPassword.current.setCustomValidity('As senhas não correspondem!')
-    } else {
-      try {
-        await axios({
-          method: 'post',
-          responseType: 'json',
-          url: 'http://localhost:3001/api/users/register',
-          data: {
-            name: name.current.value,
-            email: email.current.value,
-            password: password.current.value,
-            confirmpassword: confirmPassword.current.value
-          }
-        })
-        alert('Registrado com sucesso!')
-        routeChange()
-      } catch (err) {
-        alert(err.response.data)
-      }
-    }
+
+    // enviar usuario para o banco
+    register(user)
   }
 
   return (
@@ -50,42 +28,50 @@ export default function Register() {
           </span>
         </div>
         <div className="register-right">
-          <form className="register-box" onSubmit={handleClick}>
-            <input
-              placeholder="Nome de usuário"
+          <form className="register-box" onSubmit={handleSubmit}>
+            <Input
+              text="Nome"
               type="text"
-              required
-              ref={name}
+              name="name"
+              placeholder="Digite o seu nome"
               className="register-input"
+              handleOnChange={handleChange}
             />
-            <input
-              placeholder="Email"
-              className="register-input"
-              required
-              ref={email}
+            <Input
+              text="E-mail"
               type="email"
+              name="email"
+              placeholder="Digite o seu email"
+              className="register-input"
+              handleOnChange={handleChange}
+            />
+            <Input
+              text="Senha"
+              type="password"
+              name="password"
+              placeholder="Digite a sua senha"
+              className="register-input"
+              handleOnChange={handleChange}
+            />
+            <Input
+              text="Confirmação de Senha"
+              type="password"
+              name="confirmpassword"
+              placeholder="Comfirme a sua senha"
+              className="register-input"
+              handleOnChange={handleChange}
             />
             <input
-              type="password"
-              placeholder="Senha"
-              required
-              ref={password}
-              className="register-input"
+              type="submit"
+              value="Cadastrar"
+              className="register-button"
             />
-            <input
-              type="password"
-              ref={confirmPassword}
-              required
-              placeholder="Confirmar Senha"
-              className="register-input"
-            />
-            <button className="register-button" type="submit">
-              Registrar
-            </button>
 
-            <button className="register-register-button" onClick={routeChange}>
-              Entrar em sua conta
-            </button>
+            <Link to="/login">
+              <button className="register-register-button">
+                Já possuo conta
+              </button>
+            </Link>
           </form>
         </div>
       </div>

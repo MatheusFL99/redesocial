@@ -130,6 +130,8 @@ module.exports = class UserController {
 
     const { name, email, password, confirmpassword } = req.body
 
+    let image = ''
+
     if (req.file) {
       user.image = req.file.filename
     }
@@ -139,6 +141,8 @@ module.exports = class UserController {
       res.status(422).json({ message: 'Nome é obrigatório!' })
       return
     }
+    user.name = name
+
     if (!email) {
       res.status(422).json({ message: 'Email é obrigatório!' })
       return

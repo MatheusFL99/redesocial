@@ -1,38 +1,20 @@
-import React, { useRef, useContext } from 'react'
-import axios from 'axios'
-import { AuthContext } from '../../../context/AuthContext'
-import { CircularProgress } from '@mui/material'
-import { useNavigate } from 'react-router'
+import React, { useContext, useState } from 'react'
+import Input from '../../form/Input'
+import { Link } from 'react-router-dom'
+import { Context } from '../../../context/UserContext'
 import './login.css'
 
 export default function Login() {
-  const email = useRef()
-  const password = useRef()
-  const { isFetching } = useContext(AuthContext)
+  const [user, setUser] = useState({})
+  const { login } = useContext(Context)
 
-  let navigate = useNavigate()
-  const routeChange = () => {
-    let path = `/register`
-    navigate(path)
+  const handleChange = e => {
+    setUser({ ...user, [e.target.name]: e.target.value })
   }
 
-  const handleClick = async e => {
+  const handleSubmit = e => {
     e.preventDefault()
-    try {
-      await axios({
-        method: 'post',
-        responseType: 'json',
-        url: 'http://localhost:3001/api/users/login',
-        data: {
-          email: email.current.value,
-          password: password.current.value
-        }
-      })
-      alert('Logado com sucesso!')
-      routeChange()
-    } catch (err) {
-      alert(err.response.data)
-    }
+    login(user)
   }
 
   return (
@@ -45,41 +27,31 @@ export default function Login() {
           </span>
         </div>
         <div className="login-right">
-          <form className="login-box" onSubmit={handleClick}>
-            <input
-              placeholder="Email"
+          <form className="login-box" onSubmit={handleSubmit}>
+            <Input
+              placeholder="E-mail"
+              text="E-mail"
               className="login-input"
               type="email"
-              ref={email}
+              name="email"
+              handleOnChange={handleChange}
             />
-            <input
+            <Input
               type="password"
+              name="password"
               placeholder="Senha"
+              text="Senha"
               required
               className="login-input"
-              ref={password}
+              handleOnChange={handleChange}
             />
-            <button
-              className="login-button"
-              type="submit"
-              disabled={isFetching}
-            >
-              {' '}
-              {isFetching ? (
-                <CircularProgress color="white" size="20px" />
-              ) : (
-                'Entrar'
-              )}
-            </button>
+            <input className="login-button" type="submit" value="Entrar" />
+            <Link to="/register">
+              <button className="login-register-button">
+                Ainda não tenho conta
+              </button>
+            </Link>
             <span className="login-forgot">Esqueceu sua senha?</span>
-            <button className="login-register-button" onClick={routeChange}>
-              {' '}
-              {isFetching ? (
-                <CircularProgress color="white" size="20px" />
-              ) : (
-                'Criar nova conta'
-              )}
-            </button>
           </form>
         </div>
       </div>

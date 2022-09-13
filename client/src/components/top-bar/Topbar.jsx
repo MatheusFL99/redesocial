@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './topbar.css'
 import { Search, Notifications } from '@mui/icons-material'
+import { Context } from '../../context/UserContext'
+import { Link } from 'react-router-dom'
 
 export default function Topbar() {
+  const { logout } = useContext(Context)
   return (
     <div className="topbar-container">
       <div className="topbar-left">
@@ -18,6 +21,12 @@ export default function Topbar() {
         <div className="topbar-links">
           <span className="topbar-link">Homepage</span>
           <span className="topbar-link">Timeline</span>
+          <span className="topbar-link">
+            <Link to="/user/profile">Perfil</Link>
+          </span>
+          <span className="topbar-link" onClick={logout}>
+            Sair
+          </span>
         </div>
         <div className="topbar-icons">
           <div className="topbar-icon-item">

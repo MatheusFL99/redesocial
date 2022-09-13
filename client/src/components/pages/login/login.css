@@ -71,7 +71,7 @@
 }
 
 .login-register-button {
-  width: 60%;
+  width: 100%;
   align-self: center;
   height: 50px;
   border-radius: 10px;
@@ -79,6 +79,6 @@
   background-color: #42b72a;
   color: white;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 200;
   cursor: pointer;
 }
